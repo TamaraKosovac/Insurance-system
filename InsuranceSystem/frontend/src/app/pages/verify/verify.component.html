@@ -1,0 +1,13 @@
+<h2>Email Verification</h2>
+
+<form (ngSubmit)="onSubmit()" #verifyForm="ngForm">
+  <label for="username">Username:</label>
+  <input type="text" id="username" name="username" [(ngModel)]="username" required>
+  <br><br>
+
+  <label for="code">Verification Code:</label>
+  <input type="text" id="code" name="code" [(ngModel)]="code" required>
+  <br><br>
+
+  <button type="submit" [disabled]="!verifyForm.form.valid">Verify</button>
+</form>

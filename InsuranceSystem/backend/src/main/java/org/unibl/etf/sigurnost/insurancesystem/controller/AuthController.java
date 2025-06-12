@@ -11,6 +11,7 @@ import org.unibl.etf.sigurnost.insurancesystem.service.AuthService;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
 public class AuthController {
 
     private final AuthService authService;
@@ -18,13 +19,13 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterRequest request) {
         authService.register(request);
-        return ResponseEntity.ok("✅ Registration successful.");
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequest request) {
         authService.login(request.getUsername(), request.getPassword());
-        return ResponseEntity.ok("✅ Login successful. Check your email for verification code.");
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/verify")
