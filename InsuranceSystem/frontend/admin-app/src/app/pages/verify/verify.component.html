@@ -1,0 +1,43 @@
+<div class="login-container">
+  <div class="left-image-wrapper">
+    <img src="/assets/picture.png" alt="Left Overlay" class="left-overlay-image" />
+  </div>
+
+  <div class="login-form-wrapper">
+    <div *ngIf="showToast" class="toast-wrapper" [ngClass]="toastType">
+      <i class="fas" [ngClass]="toastType === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'"></i>
+      <span>{{ toastMessage }}</span>
+    </div>
+    <div class="login-card">
+      <div class="logo-section">
+        <img src="/assets/logo.png" alt="Logo" class="login-logo" />
+        <div class="logo-text">
+          <h1>InsuranceHouse</h1>
+          <p>Manage your insurance</p>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <form (ngSubmit)="onSubmit()" #verifyForm="ngForm">
+          <div class="input-group">
+            <input
+              type="text"
+              id="code"
+              name="code"
+              [(ngModel)]="code"
+              required
+              placeholder=" "
+            />
+            <label for="code">Verification Code</label>
+          </div>
+
+          <button type="submit" [disabled]="!verifyForm.form.valid">Verify</button>
+        </form>
+
+        <p class="register-note">
+          Didn't receive the code? <a href="#" (click)="resendCode($event)">Resend</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

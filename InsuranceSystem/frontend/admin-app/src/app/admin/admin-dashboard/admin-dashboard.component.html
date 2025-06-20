@@ -1,0 +1,73 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h2 class="dashboard-title">Admin Dashboard</h2>
+    <img src="/assets/admin.png" alt="Admin Avatar" class="admin-avatar" />
+  </div>
+
+  <div class="white-card">
+    <div class="top-actions">
+      <div class="clients-label">Users</div>
+
+      <div class="search-wrapper">
+        <i class="fas fa-search search-icon"></i>
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Search users..."
+          [(ngModel)]="searchTerm"
+        />
+      </div>
+
+      <button *ngIf="isAdmin()" class="add-user-btn" (click)="showAddForm = !showAddForm">
+        {{ showAddForm ? 'Close Form' : 'Add User' }}
+      </button>
+    </div>
+
+    <div *ngIf="showAddForm && isAdmin()" class="add-user-form">
+      <h3>Add new user</h3>
+      <form (ngSubmit)="saveUser()" #userForm="ngForm">
+        <input type="text" placeholder="First Name" name="firstname" [(ngModel)]="newUser.firstname" required />
+        <input type="text" placeholder="Last Name" name="lastname" [(ngModel)]="newUser.lastname" required />
+        <input type="text" placeholder="Username" name="username" [(ngModel)]="newUser.username" required />
+        <input type="email" placeholder="Email" name="email" [(ngModel)]="newUser.email" required />
+        <input type="password" placeholder="Password" name="password" [(ngModel)]="password" required />
+        <select name="role" [(ngModel)]="newUser.role" required>
+          <option value="CLIENT">Client</option>
+          <option value="EMPLOYEE">Employee</option>
+          <option value="ADMIN">Admin</option>
+        </select>
+        <div style="margin-top: 12px;">
+          <button type="submit">Save</button>
+        </div>
+      </form>
+    </div>
+
+    <div *ngIf="showToast" class="toast" [ngClass]="toastType">
+      {{ toastMessage }}
+    </div>
+
+    <div class="users-scroll-container">
+      <ng-container *ngIf="filteredUsers().length > 0; else noResults">
+        <div *ngFor="let user of filteredUsers()" class="employee-card">
+          <img [src]="'/assets/user.png'" alt="Profile" class="user-avatar" />
+          <div class="user-name">{{ user.firstname }} {{ user.lastname }}</div>
+          <div class="user-username">{{ user.username }}</div>
+          <div class="user-email">{{ user.email }}</div>
+          <div class="user-role">{{ user.role }}</div>
+
+          <div class="user-options" *ngIf="isAdmin()">
+            <button class="options-btn" (click)="toggleOptions(user.id)">⋮</button>
+            <div *ngIf="selectedUserId === user.id" class="options-dropdown">
+              <button (click)="editUser(user)">Update</button>
+              <button (click)="deleteUser(user.id)">Delete</button>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-template #noResults>
+        <div class="no-results">No search results.</div>
+      </ng-template>
+    </div>
+  </div>
+</div>

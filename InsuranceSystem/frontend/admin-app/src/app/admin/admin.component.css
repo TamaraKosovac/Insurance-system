@@ -1,0 +1,11 @@
+.admin-layout {
+  display: flex;
+  height: 100vh;
+}
+
+.admin-main {
+  flex-grow: 1;
+  background-color: #0B6467; 
+  padding: 32px;
+  overflow-y: auto;
+}
