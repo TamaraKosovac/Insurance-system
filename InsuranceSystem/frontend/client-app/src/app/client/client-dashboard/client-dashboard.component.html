@@ -1,0 +1,48 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h2 class="dashboard-title">Client Dashboard</h2>
+    <img src="/assets/user.png" alt="User Avatar" class="admin-avatar" />
+  </div>
+
+  <div class="white-card">
+    <div class="top-actions">
+      <div class="clients-label">My Insurances</div>
+
+      <div class="filter-wrapper">
+        <i class="fas fa-filter filter-icon"></i>
+        <select class="search-input" [(ngModel)]="filterType" (ngModelChange)="applyFilters()">
+          <option value="">All types</option>
+          <option value="LIFE">Life</option>
+          <option value="TRAVEL">Travel</option>
+          <option value="PROPERTY">Property</option>
+          <option value="VEHICLE">Vehicle</option>
+          <option value="HEALTH">Health</option>
+          <option value="LIABILITY">Liability</option>
+          <option value="ACCIDENT">Accident</option>
+          <option value="HOME">Home</option>
+          <option value="CHILD">Child</option>
+          <option value="HOUSEHOLD">Household</option>
+        </select>
+      </div>
+    </div>
+
+    <div *ngIf="showToast" class="toast" [ngClass]="toastType">
+      {{ toastMessage }}
+    </div>
+
+    <div class="users-scroll-container">
+      <ng-container *ngIf="filteredPolicies.length > 0; else noResults">
+        <div *ngFor="let policy of filteredPolicies" class="employee-card">
+          <div class="user-name"><i [ngClass]="getPolicyIcon(policy.type)" class="policy-icon"></i>{{ policy.name }}</div>
+          <div class="user-role">{{ policy.type }}</div>
+          <div class="user-amount">{{ policy.amount | currency }}</div>
+          <div class="user-description">{{ policy.description }}</div>
+        </div>
+      </ng-container>
+
+      <ng-template #noResults>
+        <div class="no-results">No policies available for this type.</div>
+      </ng-template>
+    </div>
+  </div>
+</div>

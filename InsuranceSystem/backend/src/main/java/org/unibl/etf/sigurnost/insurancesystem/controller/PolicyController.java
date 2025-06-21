@@ -11,14 +11,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/policies")
-@CrossOrigin(origins = "https://localhost:4200")
+@CrossOrigin(origins = {"https://localhost:4200", "https://localhost:4300"})
 @RequiredArgsConstructor
 public class PolicyController {
 
     private final PolicyService policyService;
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('CLIENT', 'ADMIN', 'EMPLOYEE')")
     public List<Policy> getAllPolicies() {
         return policyService.findAll();
     }

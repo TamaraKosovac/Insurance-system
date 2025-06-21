@@ -1,0 +1,27 @@
+<div class="sidebar">
+  <div class="logo">
+    <img src="/assets/logo.png" alt="InsuranceHouse Logo" />
+    <div class="logo-text">
+      <span class="app-name">InsuranceHouse</span>
+      <span class="subtitle">Manage your insurances</span>
+    </div>
+  </div>
+
+  <ul class="nav">
+    <li class="nav-item" [routerLink]="['/client/policies']" [ngClass]="{ 'active': isUsersActive() }">
+      <i class="fas fa-user"></i>
+      Insurances
+    </li>
+    <li class="nav-item" routerLink="/client/my-policies" routerLinkActive="active">
+      <i class="fas fa-file-alt"></i>
+      My Insurances
+  </li>
+  </ul>
+
+  <div class="logout">
+    <button (click)="logout()">
+      <i class="fas fa-sign-out-alt"></i>
+      Logout
+    </button>
+  </div>
+</div>

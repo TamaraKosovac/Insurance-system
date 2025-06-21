@@ -1,0 +1,121 @@
+<div class="login-container">
+  <div class="left-image-wrapper">
+    <img src="/assets/picture.png" alt="Left Overlay" class="left-overlay-image" />
+  </div>
+
+  <div class="login-form-wrapper">
+    <div *ngIf="showToast" class="toast-wrapper" [ngClass]="toastType">
+      <i class="fas" [ngClass]="toastType === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'"></i>
+      <span>{{ toastMessage }}</span>
+    </div>
+    
+    <div class="login-card">
+      <div class="logo-section">
+        <img src="/assets/logo.png" alt="Logo" class="login-logo" />
+        <div class="logo-text">
+          <h1>InsuranceHouse</h1>
+          <p>Manage your insurance</p>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <form (ngSubmit)="onSubmit()" #form="ngForm" novalidate>
+          <div class="input-group">
+            <input
+              type="text"
+              id="firstname"
+              name="firstname"
+              [(ngModel)]="firstname"
+              (input)="errorMessage = ''"
+              required
+              placeholder=" "
+            />
+            <label for="firstname">First Name</label>
+          </div>
+
+          <div class="input-group">
+            <input
+              type="text"
+              id="lastname"
+              name="lastname"
+              [(ngModel)]="lastname"
+              (input)="errorMessage = ''"
+              required
+              placeholder=" "
+            />
+            <label for="lastname">Last Name</label>
+          </div>
+
+          <div class="input-group">
+            <input
+              type="text"
+              id="username"
+              name="username"
+              [(ngModel)]="username"
+              (input)="errorMessage = ''"
+              required
+              placeholder=" "
+            />
+            <label for="username">Username</label>
+          </div>
+
+          <div class="input-group">
+            <input
+              type="email"
+              id="email"
+              name="email"
+              [(ngModel)]="email"
+              (input)="errorMessage = ''"
+              required
+              placeholder=" "
+            />
+            <label for="email">Email</label>
+          </div>
+
+          <div class="input-group password-group">
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              id="password"
+              name="password"
+              [(ngModel)]="password"
+              (input)="errorMessage = ''"
+              required
+              placeholder=" "
+            />
+            <label for="password">Password</label>
+            <button type="button" class="toggle-password" (click)="showPassword = !showPassword">
+              <i class="fas" [ngClass]="showPassword ? 'fa-eye' : 'fa-eye-slash'"></i>
+            </button>
+          </div>
+
+          <div class="input-group file-upload-group">
+            <input
+              type="text"
+              [value]="selectedFileName"
+              placeholder=" "
+              (keydown)="onFileInputKey($event)"
+              readonly
+            />
+            <label for="profileImage">Profile Picture</label>
+            <button type="button" class="file-upload-button" (click)="triggerFileInput()">
+              <i class="fas fa-folder-open"></i>
+            </button>
+            <input
+              type="file"
+              id="profileImage"
+              name="profileImage"
+              accept="image/*"
+              (change)="onFileSelected($event)"
+              hidden
+            />
+          </div>
+          <button type="submit" [disabled]="!form.form.valid">Register</button>
+        </form>
+
+        <p class="register-note">
+          Already have an account? <a routerLink="/login">Login</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
