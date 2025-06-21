@@ -28,17 +28,13 @@ export class LoginComponent {
     password: this.password
   };
 
-  console.log('Sending login request with:', loginData); // 👈 Ispis prije slanja
-
   this.http.post('https://localhost:8443/auth/login', loginData).subscribe({
     next: (res) => {
-      console.log('Login successful, server responded with:', res); // 👈 Ispis ako je uspješan
       localStorage.setItem('username', this.username);
       this.showToastMessage('Login successful. Check your email for the verification code.', 'success');
       setTimeout(() => this.router.navigate(['/verify']), 1000);
     },
     error: (err) => {
-      console.error('Login failed:', err); // 👈 Detaljan ispis greške
       const message = err?.error?.message || 'Login failed. Please check your credentials.';
       this.showToastMessage(message, 'error');
     }

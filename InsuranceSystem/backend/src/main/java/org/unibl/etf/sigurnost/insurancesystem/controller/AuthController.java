@@ -1,12 +1,15 @@
 package org.unibl.etf.sigurnost.insurancesystem.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.unibl.etf.sigurnost.insurancesystem.dto.JwtResponse;
 import org.unibl.etf.sigurnost.insurancesystem.dto.LoginRequest;
 import org.unibl.etf.sigurnost.insurancesystem.dto.RegisterRequest;
 import org.unibl.etf.sigurnost.insurancesystem.dto.TwoFactorRequest;
+import org.unibl.etf.sigurnost.insurancesystem.model.User;
+import org.unibl.etf.sigurnost.insurancesystem.repository.UserRepository;
 import org.unibl.etf.sigurnost.insurancesystem.service.AuthService;
 
 import java.io.IOException;
@@ -22,6 +25,7 @@ import java.util.UUID;
 public class AuthController {
 
     private final AuthService authService;
+    private final UserRepository userRepository;
 
     @PostMapping("/register")
     public ResponseEntity<String> register(
@@ -78,6 +82,13 @@ public class AuthController {
     public ResponseEntity<String> resend(@RequestBody TwoFactorRequest request) {
         authService.resendVerificationCode(request.getUsername());
         return ResponseEntity.ok("Verification code resent.");
+    }
+
+    @GetMapping("/role/{username}")
+    public ResponseEntity<String> getUserRole(@PathVariable String username) {
+        return userRepository.findByUsername(username)
+                .map(user -> ResponseEntity.ok(user.getRole().name()))
+                .orElse(ResponseEntity.notFound().build());
     }
 
 }

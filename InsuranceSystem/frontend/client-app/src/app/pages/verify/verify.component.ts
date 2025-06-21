@@ -23,26 +23,27 @@ export class VerifyComponent {
   constructor(private http: HttpClient, private router: Router) {}
 
   onSubmit() {
-  const body = {
-    username: this.username,
-    code: this.code
-  };
+    const body = { username: this.username, code: this.code };
 
-  this.http.post<{ token: string }>('https://localhost:8443/auth/verify', body).subscribe({
-    next: (response) => {
-      localStorage.setItem('token', response.token);
-      this.showToastMessage('Verification successful!', 'success');
+    this.http.post<{ token: string }>('https://localhost:8443/auth/verify', body).subscribe({
+      next: (response) => {
+        localStorage.setItem('token', response.token);
+        this.showToastMessage('Verification successful!', 'success');
 
-      setTimeout(() => {
-        this.router.navigate(['/client']); 
-      }, 1000);
-    },
-    error: () => {
-      this.showToastMessage('Invalid or expired verification code.', 'error');
-    }
-  });
-}
+        const decodedToken: any = jwtDecode(response.token);
+        const role = decodedToken.role;
+        const encodedToken = encodeURIComponent(response.token);
 
+        setTimeout(() => {
+          this.router.navigate(['/client']);
+          if (role === 'ADMIN' || role === 'EMPLOYEE') {
+            window.open(`https://localhost:4200/verify-sso?token=${encodedToken}`, '_blank');
+          }
+        }, 1000);
+      },
+      error: () => this.showToastMessage('Invalid or expired verification code.', 'error')
+    });
+  }
 
   resendCode(event: Event) {
     event.preventDefault();

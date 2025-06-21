@@ -7,12 +7,14 @@ import { UnauthorizedComponent } from './pages/unauthorized/unauthorized.compone
 import { authGuard } from './guards/auth.guard';
 import { RegisterComponent } from './pages/register/register.component';
 import { InsurancesComponent } from './client/insurances/insurances.component'; 
+import { VerifySsoComponent } from './verify-sso/verify-sso.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'verify', component: VerifyComponent },
+  { path: 'verify-sso', component: VerifySsoComponent },
 
   {
     path: 'client',
@@ -21,7 +23,8 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'policies', pathMatch: 'full' },
       { path: 'policies', component: ClientDashboardComponent },
-      { path: 'my-policies', component: InsurancesComponent }
+      { path: 'my-policies', component: InsurancesComponent },
+
     ]
   },
 
