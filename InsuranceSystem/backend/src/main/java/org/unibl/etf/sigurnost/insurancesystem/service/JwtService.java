@@ -19,6 +19,7 @@ public class JwtService {
         return Jwts.builder()
                 .setSubject(user.getUsername())
                 .claim("role", user.getRole().name())
+                .claim("userId", user.getId())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
                 .signWith(key)
@@ -33,6 +34,16 @@ public class JwtService {
                 .getBody()
                 .getSubject();
     }
+
+    public Long extractUserId(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .get("userId", Long.class);
+    }
+
 
     public boolean isTokenValid(String token, User user) {
         String username = extractUsername(token);

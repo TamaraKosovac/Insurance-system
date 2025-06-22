@@ -6,7 +6,7 @@
 
   <div class="white-card">
     <div class="top-actions">
-      <div class="clients-label">My Insurances</div>
+      <div class="clients-label">Insurances</div>
 
       <div class="filter-wrapper">
         <i class="fas fa-filter filter-icon"></i>
@@ -37,6 +37,7 @@
           <div class="user-role">{{ policy.type }}</div>
           <div class="user-amount">{{ policy.amount | currency }}</div>
           <div class="user-description">{{ policy.description }}</div>
+          <button class="buy-btn" (click)="buyPolicy(policy)">Buy</button>
         </div>
       </ng-container>
 

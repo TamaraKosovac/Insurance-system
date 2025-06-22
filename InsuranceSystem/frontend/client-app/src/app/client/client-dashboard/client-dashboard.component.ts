@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { jwtDecode } from 'jwt-decode';
+import { ActivatedRoute } from '@angular/router';
 
 interface Policy {
   id?: number;
@@ -27,11 +27,21 @@ export class ClientDashboardComponent implements OnInit {
   toastType: 'success' | 'error' = 'success';
   showToast = false;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
-    this.loadPolicies();
-  }
+  this.route.queryParams.subscribe(params => {
+    if (params['payment'] === 'success') {
+      this.showToastMessage('Plaćanje uspješno!', 'success');
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  });
+
+  this.loadPolicies();
+}
 
   loadPolicies(): void {
     const token = localStorage.getItem('token');
@@ -76,5 +86,29 @@ export class ClientDashboardComponent implements OnInit {
       case 'HOUSEHOLD': return 'fas fa-cogs';
       default: return 'fas fa-question-circle';
     }
+  }
+
+  buyPolicy(policy: Policy): void {
+    console.log('Sending policy to backend:', policy);
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      this.showToastMessage('Token not found. Please log in again.', 'error');
+      return;
+    }
+
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    this.http.post<{ url: string }>(
+      'https://localhost:8443/api/stripe/checkout',
+      { policyId: policy.id },
+      { headers }
+    ).subscribe({
+      next: (res) => window.location.href = res.url,
+      error: (err) => {
+        console.error(err);
+        this.showToastMessage('Stripe checkout failed.', 'error');
+      }
+    });
   }
 }
