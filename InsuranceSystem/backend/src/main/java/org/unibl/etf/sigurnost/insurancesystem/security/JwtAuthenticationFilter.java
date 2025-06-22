@@ -11,6 +11,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.unibl.etf.sigurnost.insurancesystem.model.User;
+import org.unibl.etf.sigurnost.insurancesystem.repository.RevokedTokenRepository;
 import org.unibl.etf.sigurnost.insurancesystem.repository.UserRepository;
 import org.unibl.etf.sigurnost.insurancesystem.service.JwtService;
 
@@ -22,10 +23,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserRepository userRepository;
+    private final RevokedTokenRepository revokedTokenRepository;
 
-    public JwtAuthenticationFilter(JwtService jwtService, UserRepository userRepository) {
+    public JwtAuthenticationFilter(JwtService jwtService, UserRepository userRepository, RevokedTokenRepository revokedTokenRepository) {
         this.jwtService = jwtService;
         this.userRepository = userRepository;
+        this.revokedTokenRepository = revokedTokenRepository;
     }
 
     @Override
@@ -40,6 +43,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         String token = authHeader.substring(7);
+        if (revokedTokenRepository.existsByToken(token)) {
+            System.out.println("🚫 Token je blokiran – pristup odbijen.");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"message\": \"Token je opozvan. Sesija prekinuta.\"}");
+            return;
+        }
+
         String username = jwtService.extractUsername(token);
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -57,5 +68,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
     }
+
 }
 

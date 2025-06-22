@@ -17,6 +17,7 @@ import org.unibl.etf.sigurnost.insurancesystem.model.User;
 import org.unibl.etf.sigurnost.insurancesystem.repository.PolicyRepository;
 import org.unibl.etf.sigurnost.insurancesystem.repository.PurchaseRepository;
 import org.unibl.etf.sigurnost.insurancesystem.repository.UserRepository;
+import org.unibl.etf.sigurnost.insurancesystem.service.AccessControllerService;
 import org.unibl.etf.sigurnost.insurancesystem.service.EmailService;
 import org.unibl.etf.sigurnost.insurancesystem.service.PdfGeneratorService;
 
@@ -32,6 +33,9 @@ public class StripeWebhookController {
     private final PurchaseRepository purchaseRepository;
     private final EmailService emailService;
     private final PdfGeneratorService pdfGeneratorService;
+    private final AccessControllerService accessControllerService;
+    private final jakarta.servlet.http.HttpServletRequest request;
+
 
     @Value("${stripe.webhook-secret}")
     private String webhookSecret;
@@ -63,6 +67,27 @@ public class StripeWebhookController {
             String extractedEmail = session.path("customer_email").asText();
             String policyIdStr = session.path("client_reference_id").asText();
             long amount = session.path("amount_total").asLong();
+            String authHeader = request.getHeader("Authorization");
+            String token = authHeader != null && authHeader.startsWith("Bearer ") ? authHeader : null;
+
+            if (amount > 1000000) {
+                accessControllerService.logSuspiciousEvent(
+                        extractedEmail,
+                        "LARGE_PAYMENT: $" + (amount / 100.0),
+                        true,
+                        request,
+                        token
+                );
+            } else {
+                accessControllerService.logSuspiciousEvent(
+                        extractedEmail,
+                        "Payment: $" + (amount / 100.0),
+                        false,
+                        request,
+                        token
+                );
+            }
+
             String transactionId = session.path("payment_intent").asText();
 
 

@@ -1,4 +1,5 @@
 package org.unibl.etf.sigurnost.insurancesystem.controller;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -8,15 +9,18 @@ import org.unibl.etf.sigurnost.insurancesystem.dto.JwtResponse;
 import org.unibl.etf.sigurnost.insurancesystem.dto.LoginRequest;
 import org.unibl.etf.sigurnost.insurancesystem.dto.RegisterRequest;
 import org.unibl.etf.sigurnost.insurancesystem.dto.TwoFactorRequest;
-import org.unibl.etf.sigurnost.insurancesystem.model.User;
 import org.unibl.etf.sigurnost.insurancesystem.repository.UserRepository;
+import org.unibl.etf.sigurnost.insurancesystem.service.AccessControllerService;
 import org.unibl.etf.sigurnost.insurancesystem.service.AuthService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
 @RequestMapping("/auth")
@@ -26,6 +30,9 @@ public class AuthController {
 
     private final AuthService authService;
     private final UserRepository userRepository;
+    private final AccessControllerService accessControllerService;
+
+    private final Map<String, Integer> failedAttempts = new ConcurrentHashMap<>();
 
     @PostMapping("/register")
     public ResponseEntity<String> register(
@@ -65,11 +72,29 @@ public class AuthController {
         }
     }
 
-
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest request) {
-        authService.login(request.getUsername(), request.getPassword());
-        return ResponseEntity.ok().build();
+    public ResponseEntity<String> login(@RequestBody LoginRequest request, HttpServletRequest httpRequest) {
+        String username = request.getUsername();
+        try {
+            authService.login(username, request.getPassword());
+            failedAttempts.remove(username);
+            return ResponseEntity.ok().build();
+        } catch (RuntimeException ex) {
+            int attempts = failedAttempts.getOrDefault(username, 0) + 1;
+            failedAttempts.put(username, attempts);
+
+            if (attempts >= 5) {
+                accessControllerService.logSuspiciousEvent(
+                        username,
+                        "Multiple failed login attempts: " + attempts,
+                        true,
+                        httpRequest
+                );
+                failedAttempts.remove(username);
+            }
+
+            throw ex;
+        }
     }
 
     @PostMapping("/verify")
@@ -90,5 +115,4 @@ public class AuthController {
                 .map(user -> ResponseEntity.ok(user.getRole().name()))
                 .orElse(ResponseEntity.notFound().build());
     }
-
 }

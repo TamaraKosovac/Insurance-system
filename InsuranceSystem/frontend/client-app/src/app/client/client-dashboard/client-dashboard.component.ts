@@ -33,15 +33,8 @@ export class ClientDashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-  this.route.queryParams.subscribe(params => {
-    if (params['payment'] === 'success') {
-      this.showToastMessage('Plaćanje uspješno!', 'success');
-      window.history.replaceState({}, document.title, window.location.pathname);
-    }
-  });
-
-  this.loadPolicies();
-}
+    this.loadPolicies();
+  }
 
   loadPolicies(): void {
     const token = localStorage.getItem('token');
@@ -51,6 +44,24 @@ export class ClientDashboardComponent implements OnInit {
       next: (policies) => {
         this.policies = policies;
         this.applyFilters();
+
+        this.route.queryParams.subscribe(params => {
+          if (params['payment'] === 'success') {
+            this.showToastMessage('Payment is successful.', 'success');
+
+            const lastPolicyId = Number(localStorage.getItem('lastPurchasedPolicyId'));
+            const purchasedPolicy = this.policies.find(p => p.id === lastPolicyId);
+
+            setTimeout(() => {
+              if (purchasedPolicy && purchasedPolicy.amount > 10000) {
+                localStorage.clear();
+                window.location.href = '/login';
+              }
+            }, 3000);
+
+            window.history.replaceState({}, document.title, window.location.pathname);
+          }
+        });
       },
       error: (err) => {
         console.error('Error loading policies:', err);
@@ -96,6 +107,8 @@ export class ClientDashboardComponent implements OnInit {
       this.showToastMessage('Token not found. Please log in again.', 'error');
       return;
     }
+
+    localStorage.setItem('lastPurchasedPolicyId', String(policy.id));
 
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
