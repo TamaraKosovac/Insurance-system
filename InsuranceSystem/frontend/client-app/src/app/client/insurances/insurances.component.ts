@@ -66,4 +66,8 @@ export class InsurancesComponent implements OnInit {
       default: return 'fas fa-question-circle';
     }
   }
+
+  getTotalAmount(): number {
+    return this.filteredPolicies.reduce((sum, policy) => sum + policy.amount, 0);
+  }
 }

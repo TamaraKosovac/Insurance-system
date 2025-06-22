@@ -25,6 +25,11 @@
         </select>
       </div>
     </div>
+    
+    <div class="summary-container">
+      <div class="summary-item">Total Policies: {{ filteredPolicies.length }}</div>
+      <div class="summary-item">Total Amount: {{ getTotalAmount() | currency }}</div>
+    </div>
 
     <div class="users-scroll-container">
       <ng-container *ngIf="filteredPolicies.length > 0; else noResults">
