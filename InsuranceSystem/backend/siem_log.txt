@@ -1,2 +1,9 @@
 [2025-06-22T16:10:10.015225300] user=tamara.kosovac@student.etf.unibl.org ip=0:0:0:0:0:0:0:1 action=LARGE_PAYMENT: $15000.0 suspicious=true
 [2025-06-22T16:16:29.231307800] user=tamara ip=0:0:0:0:0:0:0:1 action=Multiple failed login attempts: 5 suspicious=true
+[2025-06-23T10:45:53.315237800] user=tamara.kosovac@student.etf.unibl.org ip=0:0:0:0:0:0:0:1 action=Payment: $1200.0 suspicious=false
+[2025-06-23T10:46:38.555369400] user=tamara.kosovac@student.etf.unibl.org ip=0:0:0:0:0:0:0:1 action=LARGE_PAYMENT: $15000.0 suspicious=true
+[2025-06-23T10:47:47.554647200] user=tamara ip=0:0:0:0:0:0:0:1 action=Multiple failed login attempts: 5 suspicious=true
+[2025-06-23T10:58:07.592519] user=tamara.kosovac@student.etf.unibl.org ip=0:0:0:0:0:0:0:1 action=Payment: $360.0 suspicious=false
+[2025-06-23T12:40:01.980119200] user=admin ip=0:0:0:0:0:0:0:1 action=Multiple failed login attempts: 5 suspicious=true
+[2025-06-23T12:46:08.422141900] user=tamara.kosovac@student.etf.unibl.org ip=0:0:0:0:0:0:0:1 action=Payment: $1200.0 suspicious=false
+[2025-06-23T12:47:26.144024800] user=tamara.kosovac@student.etf.unibl.org ip=0:0:0:0:0:0:0:1 action=LARGE_PAYMENT: $15000.0 suspicious=true
