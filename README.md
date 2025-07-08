@@ -30,9 +30,9 @@ The administrator has the following options:
   
  - Overview, addition, modification, deletion, and search of all insurance policies in the system
 
-  ![screenshot](Screenshots/adminInsurances.png)
+   ![screenshot](Screenshots/adminInsurances.png)
 
-  ![screenshot](Screenshots/addPolicy.png)
+   ![screenshot](Screenshots/addPolicy.png)
 
   - An employee can only view and search other users, but has full access to manage policies just like an admin
 
@@ -42,13 +42,13 @@ The client has the following options:
 
  - Browsing and purchasing insurance policies, where after the purchase a PDF document with purchase details is automatically sent to the client via email
 
-  ![screenshot](Screenshots/clientDashboard.png)
+   ![screenshot](Screenshots/clientDashboard.png)
 
-  ![screenshot](Screenshots/buyInsurance.png)
+   ![screenshot](Screenshots/buyInsurance.png)
 
  - Overview of purchased insurance policies and additional purchase details
 
-  ![screenshot](Screenshots/clientInsurances.png)
+   ![screenshot](Screenshots/clientInsurances.png)
 
 
 ## 📄 Reference to the detailed description
