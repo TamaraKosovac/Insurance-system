@@ -41,6 +41,7 @@
           <div class="user-role">{{ policy.type }}</div>
           <div class="user-amount">{{ policy.amount | currency }}</div>
           <div class="user-description">{{ policy.description }}</div>
+          <div class="user-date">{{ policy.purchaseDate | date: 'dd-MM-yyyy HH:mm' }}</div>
         </div>
       </ng-container>
 

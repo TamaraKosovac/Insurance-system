@@ -140,6 +140,14 @@
   min-width: 120px;
 }
 
+.user-date {
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+  min-width: 120px;
+  margin-left: 70px;
+}
+
 .no-results {
   text-align: center;
   padding: 20px;

@@ -288,3 +288,9 @@ button:hover:not(:disabled) {
   90%  { opacity: 1; }
   100% { opacity: 0; transform: translateY(-10px); }
 }
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+  -webkit-text-fill-color: #000 !important;
+  transition: background-color 9999s ease-out;
+}

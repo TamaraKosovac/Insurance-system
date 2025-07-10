@@ -185,6 +185,7 @@
   border: none;
   border-radius: 8px;
   cursor: pointer;
+  margin-left: 1000px;
 }
 
 .add-user-form button[type="submit"]:hover {
